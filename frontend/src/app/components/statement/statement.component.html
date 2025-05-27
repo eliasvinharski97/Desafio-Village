@@ -1,0 +1,92 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">Consultar Extrato</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="statementForm" (ngSubmit)="onSubmit()">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label for="accountId" class="form-label">ID da Conta</label>
+                <input
+                  type="number"
+                  id="accountId"
+                  class="form-control"
+                  formControlName="accountId"
+                  [ngClass]="{'is-invalid': statementForm.get('accountId')?.invalid && statementForm.get('accountId')?.touched}"
+                >
+                <div class="invalid-feedback">
+                  ID da conta é obrigatório e deve ser maior que zero
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <label for="startDate" class="form-label">Data Inicial</label>
+                <input
+                  type="date"
+                  id="startDate"
+                  class="form-control"
+                  formControlName="startDate"
+                >
+              </div>
+
+              <div class="col-md-4">
+                <label for="endDate" class="form-label">Data Final</label>
+                <input
+                  type="date"
+                  id="endDate"
+                  class="form-control"
+                  formControlName="endDate"
+                >
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 mt-3">
+              <button type="submit" class="btn btn-primary" [disabled]="!statementForm.valid">
+                Consultar Extrato
+              </button>
+              <a routerLink="/" class="btn btn-secondary">Voltar</a>
+            </div>
+          </form>
+
+          <div class="mt-4" *ngIf="showTransactions">
+            <h4>Extrato de Transações</h4>
+            <div class="table-responsive">
+              <table class="table table-hover" *ngIf="transactions.length > 0">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Tipo</th>
+                    <th class="text-end">Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let transaction of transactions">
+                    <td>{{transaction.dataTransacao | date:'dd/MM/yyyy HH:mm'}}</td>
+                    <td>
+                      <span [ngClass]="transaction.valor > 0 ? 'text-success' : 'text-danger'">
+                        {{transaction.valor > 0 ? 'Depósito' : 'Saque'}}
+                      </span>
+                    </td>
+                    <td class="text-end" [ngClass]="transaction.valor > 0 ? 'text-success' : 'text-danger'">
+                      {{transaction.valor | currency:'BRL'}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div *ngIf="transactions.length === 0" class="text-center py-4">
+                <p class="text-muted">Nenhuma transação encontrada no período selecionado.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <div class="alert alert-danger" *ngIf="errorMessage">{{errorMessage}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

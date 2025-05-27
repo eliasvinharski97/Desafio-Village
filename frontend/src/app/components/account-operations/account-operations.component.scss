@@ -1,0 +1,28 @@
+// Estilos específicos das operações de conta
+.card {
+  margin-bottom: 1.5rem;
+}
+
+.table {
+  margin-bottom: 0;
+  
+  th {
+    background-color: #f8f9fa;
+  }
+  
+  td {
+    vertical-align: middle;
+  }
+}
+
+.text-success {
+  color: var(--success-color) !important;
+}
+
+.text-danger {
+  color: var(--danger-color) !important;
+}
+
+.badge {
+  font-size: 0.875rem;
+} 
