@@ -290,4 +290,26 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.navbar, .navbar .navbar-brand, .navbar .nav-link {
+  color: #fff !important;
+}
+
+.navbar .nav-link.active {
+  color: #fff !important;
+  text-decoration: underline;
+}
+
+.btn-primary, .btn-primary:active, .btn-primary:focus, .btn-primary:hover {
+  color: #fff !important;
+}
+
+.card-header.bg-primary h1,
+.card-header.bg-primary h2,
+.card-header.bg-primary h3,
+.card-header.bg-primary h4,
+.card-header.bg-primary h5,
+.card-header.bg-primary h6 {
+  color: #fff !important;
 } 

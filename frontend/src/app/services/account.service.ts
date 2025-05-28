@@ -30,16 +30,16 @@ export class AccountService {
     return this.http.get<number>(`${this.apiUrl}/${accountId}/saldo`);
   }
 
-  deposit(accountId: number, amount: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${accountId}/depositar`, { valor: amount });
+  deposit(accountId: number, valor: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${accountId}/deposito?valor=${valor}`, {});
   }
 
-  withdraw(accountId: number, amount: number): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${accountId}/sacar`, { valor: amount });
+  withdraw(accountId: number, valor: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${accountId}/saque?valor=${valor}`, {});
   }
 
-  toggleBlock(accountId: number): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/${accountId}/bloquear`, {});
+  toggleBlock(accountId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${accountId}/bloquear`, {});
   }
 
   getStatement(id: number): Observable<AccountStatement> {

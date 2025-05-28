@@ -1,14 +1,17 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  imports: [CommonModule, RouterModule, NavMenuComponent],
+  template: `
+    <app-nav-menu></app-nav-menu>
+    <router-outlet></router-outlet>
+  `
 })
 export class AppComponent {
-  title = 'Sistema Bancário';
+  title = 'Conta';
 } 

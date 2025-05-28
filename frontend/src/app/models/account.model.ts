@@ -20,10 +20,10 @@ export interface Transaction {
 }
 
 export interface Person {
-  idPessoa: number;
+  idPessoa?: number;
   nome: string;
   cpf: string;
-  dataNascimento: Date;
+  dataNascimento: string;
 }
 
 export interface AccountStatement {

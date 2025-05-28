@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { AccountService } from '../../services/account.service';
+import { PessoaService } from '../../services/pessoa.service';
+import { AuthService } from '../../services/auth.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
@@ -18,11 +20,15 @@ export class AccountFormComponent {
   successMessage = '';
   isValidatingPerson = false;
   personExists = false;
+  personName = '';
 
   constructor(
     private fb: FormBuilder,
     private accountService: AccountService,
-    private router: Router
+    private pessoaService: PessoaService,
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
     this.accountForm = this.fb.group({
       idPessoa: ['', [Validators.required, Validators.min(1)]],
@@ -32,37 +38,40 @@ export class AccountFormComponent {
       flagAtivo: [true]
     });
 
+    // Pegar o ID da pessoa da URL se disponível
+    this.route.queryParams.subscribe(params => {
+      if (params['idPessoa']) {
+        this.accountForm.patchValue({ idPessoa: params['idPessoa'] });
+        this.validatePerson(params['idPessoa']);
+      }
+    });
+
     // Monitorar mudanças no campo idPessoa
-    this.accountForm.get('idPessoa')?.valueChanges
-      .pipe(
-        debounceTime(500),
-        distinctUntilChanged()
-      )
-      .subscribe(value => {
-        if (value && value > 0) {
-          this.validatePerson(value);
-        } else {
-          this.personExists = false;
-        }
-      });
+    this.accountForm.get('idPessoa')?.valueChanges.subscribe(value => {
+      if (value && value > 0) {
+        this.validatePerson(value);
+      } else {
+        this.personExists = false;
+        this.personName = '';
+      }
+    });
   }
 
   validatePerson(idPessoa: number) {
     this.isValidatingPerson = true;
     this.errorMessage = '';
     
-    this.accountService.validatePerson(idPessoa).subscribe({
-      next: (exists) => {
-        this.personExists = exists;
+    this.pessoaService.buscarPorId(idPessoa).subscribe({
+      next: (pessoa) => {
+        this.personExists = true;
+        this.personName = pessoa.nome;
         this.isValidatingPerson = false;
-        if (!exists) {
-          this.errorMessage = 'Pessoa não encontrada com este ID';
-        }
       },
       error: () => {
         this.isValidatingPerson = false;
         this.personExists = false;
-        this.errorMessage = 'Erro ao validar pessoa';
+        this.personName = '';
+        this.errorMessage = 'Pessoa não encontrada com este ID';
       }
     });
   }
@@ -95,25 +104,28 @@ export class AccountFormComponent {
         flagAtivo: this.accountForm.value.flagAtivo
       };
 
-      console.log('Enviando dados:', formValue);
-
       this.accountService.createAccount(formValue).subscribe({
         next: (response) => {
-          console.log('Resposta do servidor:', response);
           this.successMessage = 'Conta criada com sucesso!';
           this.errorMessage = '';
+          
+          // Fazer login automático
+          this.authService.login(
+            formValue.pessoa.idPessoa,
+            response.idConta!,
+            this.personName
+          );
+
+          // Redirecionar para o dashboard
           setTimeout(() => {
-            this.router.navigate(['/']);
-          }, 2000);
+            this.router.navigate(['/dashboard']);
+          }, 1500);
         },
         error: (error) => {
-          console.error('Erro do servidor:', error);
           this.errorMessage = error.error?.message || 'Erro ao criar conta';
           this.successMessage = '';
         }
       });
-    } else if (!this.personExists) {
-      this.errorMessage = 'Por favor, insira um ID de pessoa válido';
     }
   }
 } 

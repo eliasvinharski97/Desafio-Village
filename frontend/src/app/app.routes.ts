@@ -1,18 +1,25 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './components/home/home.component';
+import { PessoaFormComponent } from './components/pessoa-form/pessoa-form.component';
 import { AccountFormComponent } from './components/account-form/account-form.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DepositComponent } from './components/deposit/deposit.component';
 import { WithdrawComponent } from './components/withdraw/withdraw.component';
-import { BalanceComponent } from './components/balance/balance.component';
-import { BlockAccountComponent } from './components/block-account/block-account.component';
 import { StatementComponent } from './components/statement/statement.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'create-account', component: AccountFormComponent },
-  { path: 'deposit', component: DepositComponent },
-  { path: 'withdraw', component: WithdrawComponent },
-  { path: 'balance', component: BalanceComponent },
-  { path: 'block-account', component: BlockAccountComponent },
-  { path: 'statement', component: StatementComponent }
+  // Rota inicial - Cadastro de pessoa
+  { path: '', redirectTo: '/pessoas/nova', pathMatch: 'full' },
+  { path: 'pessoas/nova', component: PessoaFormComponent },
+  
+  // Rota de criação de conta
+  { path: 'contas/nova', component: AccountFormComponent },
+  
+  // Rotas principais após login
+  { path: 'dashboard', component: DashboardComponent },
+  { path: 'deposito', component: DepositComponent },
+  { path: 'saque', component: WithdrawComponent },
+  { path: 'extrato', component: StatementComponent },
+  
+  // Rota padrão - redireciona para o dashboard
+  { path: '**', redirectTo: '/dashboard' }
 ]; 

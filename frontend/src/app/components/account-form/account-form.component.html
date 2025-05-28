@@ -31,6 +31,9 @@
                   <i class="bi bi-x-circle-fill text-danger"></i>
                 </span>
               </div>
+              <div class="form-text text-success" *ngIf="personName">
+                Nome: {{personName}}
+              </div>
               <div class="invalid-feedback" *ngIf="accountForm.get('idPessoa')?.errors?.['required']">
                 ID da pessoa é obrigatório
               </div>
@@ -41,7 +44,7 @@
 
             <!-- Saldo Inicial -->
             <div class="mb-3">
-              <label for="saldo" class="form-label">Saldo Inicial (R$)</label>
+              <label for="saldo" class="form-label">Saldo Inicial</label>
               <div class="input-group">
                 <span class="input-group-text">R$</span>
                 <input
@@ -50,18 +53,19 @@
                   id="saldo"
                   formControlName="saldo"
                   [ngClass]="{'is-invalid': accountForm.get('saldo')?.invalid && accountForm.get('saldo')?.touched}"
-                  step="0.01"
-                  min="0"
                 >
               </div>
-              <div class="invalid-feedback">
-                Saldo inicial deve ser maior ou igual a zero
+              <div class="invalid-feedback" *ngIf="accountForm.get('saldo')?.errors?.['required']">
+                Saldo inicial é obrigatório
+              </div>
+              <div class="invalid-feedback" *ngIf="accountForm.get('saldo')?.errors?.['min']">
+                Saldo não pode ser negativo
               </div>
             </div>
 
             <!-- Limite de Saque Diário -->
             <div class="mb-3">
-              <label for="limiteSaqueDiario" class="form-label">Limite de Saque Diário (R$)</label>
+              <label for="limiteSaqueDiario" class="form-label">Limite de Saque Diário</label>
               <div class="input-group">
                 <span class="input-group-text">R$</span>
                 <input
@@ -70,11 +74,12 @@
                   id="limiteSaqueDiario"
                   formControlName="limiteSaqueDiario"
                   [ngClass]="{'is-invalid': accountForm.get('limiteSaqueDiario')?.invalid && accountForm.get('limiteSaqueDiario')?.touched}"
-                  step="0.01"
-                  min="0"
                 >
               </div>
-              <div class="invalid-feedback">
+              <div class="invalid-feedback" *ngIf="accountForm.get('limiteSaqueDiario')?.errors?.['required']">
+                Limite de saque diário é obrigatório
+              </div>
+              <div class="invalid-feedback" *ngIf="accountForm.get('limiteSaqueDiario')?.errors?.['min']">
                 Limite de saque diário deve ser maior que zero
               </div>
             </div>
