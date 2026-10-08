@@ -2,6 +2,12 @@
 
 Sistema de gerenciamento de contas bancárias desenvolvido com Spring Boot (backend) e Angular (frontend).
 
+## Visão geral
+
+O projeto documenta operações sobre contas e transações, incluindo consulta de extrato por período. Reúne backend, frontend e acesso a banco de dados em uma aplicação.
+
+As funcionalidades e instruções técnicas estão descritas a seguir. Este projeto integra meu [portfólio profissional](https://github.com/eliasvinharski97).
+
 ## Funcionalidades
 
 - Criação de contas
